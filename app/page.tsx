@@ -1,10 +1,9 @@
-import Hero from "../components/sections/Hero";
+import {Hero} from "@/components/sections/Hero";
 
 export default function Home() {
   return (
-    <main className="bg-[#0a0a0a] min-h-screen text-white">
+    <main className="min-h-screen bg-[#0a0a0a]">
       <Hero />
-      {/* Next Step: <BentoGrid /> */}
     </main>
   );
 }
