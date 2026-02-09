@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #282828;
+  --foreground: #fbf1c7;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-jetbrains-mono), monospace;
+  overflow: hidden; /* Prevent scrolling, we want a desktop feel */
+}
+
+/* Custom Scrollbar for Terminal Windows */
+::-webkit-scrollbar {
+  width: 10px;
+  background: #282828;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #504945;
+  border: 2px solid #282828;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #665c54;
+}
