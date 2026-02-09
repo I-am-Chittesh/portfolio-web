@@ -9,14 +9,19 @@ import Image from "next/image";
 export default function LockScreen() {
   const { unlock, isLocked, bootSequence } = useSession();
   const [password, setPassword] = useState("");
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
   
-  // Auto-focus logic or simple submit
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    unlock(); // Any password works for now
+    unlock();
   };
 
-  // 1. The Boot Log Animation (The "BIOS" Text)
+  // 1. Boot Sequence (No Changes)
   if (bootSequence) {
     return (
       <div className="fixed inset-0 bg-gruv-bg text-gruv-fg font-mono p-10 z-50 flex flex-col justify-end">
@@ -38,41 +43,40 @@ export default function LockScreen() {
     );
   }
 
-  // 2. The Actual Lock Screen
+  // 2. The Main Lock Screen
   return (
     <AnimatePresence>
       {isLocked && (
         <motion.div
           initial={{ y: 0 }}
           exit={{ y: "-100%", transition: { duration: 0.8, ease: "easeInOut" } }}
-          className="fixed inset-0 z-40 bg-gruv-bg flex flex-col items-center justify-center font-mono"
+          className="fixed inset-0 z-40 bg-gruv-bg flex flex-col font-mono overflow-hidden"
         >
-          {/* Clock */}
-          <div className="absolute top-10 md:top-20 text-center space-y-2">
-            <h1 className="text-6xl md:text-8xl font-bold text-gruv-fg0 tracking-tighter">
-              {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          
+          {/* --- TOP SECTION: THE NAME --- */}
+          {/* Using padding-top to keep it high, w-full to center it */}
+          <div className="w-full text-center pt-24 z-10">
+            <h1 className="text-7xl md:text-9xl font-black text-gruv-fg0 tracking-widest uppercase select-none">
+              CHITTESH
             </h1>
-            <p className="text-gruv-gray text-xl">
-              {new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
-            </p>
           </div>
 
-          {/* User Profile */}
-          <div className="flex flex-col items-center space-y-6 mt-10">
-            <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-gruv-gray/30 ring-4 ring-gruv-bgSoft shadow-2xl">
+          {/* --- MIDDLE SECTION: PROFILE & INPUT --- */}
+          {/* flex-grow pushes this into the empty space between Name and Bottom */}
+          <div className="flex-grow flex flex-col items-center justify-center space-y-8 -mt-10">
+            {/* Profile Pic */}
+            <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-gruv-gray/30 ring-4 ring-gruv-bgSoft shadow-2xl">
               <Image 
-                src="/images/profile.png" // Make sure this matches your file name!
+                src="/images/profile.png"
                 alt="User"
                 fill
                 className="object-cover"
               />
             </div>
             
-            <h2 className="text-2xl font-bold text-gruv-fg">Chittesh</h2>
-
             {/* Password Input */}
-            <form onSubmit={handleLogin} className="relative w-64 group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gruv-gray">
+            <form onSubmit={handleLogin} className="relative w-72 group">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gruv-gray">
                 <Lock size={16} />
               </div>
               <input 
@@ -80,21 +84,29 @@ export default function LockScreen() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-gruv-bgSoft text-gruv-fg px-10 py-2 rounded-full border border-gruv-gray/20 focus:outline-none focus:border-gruv-yellow transition-all placeholder:text-gruv-gray/50"
+                className="w-full bg-gruv-bgSoft text-gruv-fg px-12 py-3 rounded-full border border-gruv-gray/20 focus:outline-none focus:border-gruv-yellow focus:ring-1 focus:ring-gruv-yellow transition-all placeholder:text-gruv-gray/50 shadow-lg"
                 autoFocus
               />
               <button 
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 bg-gruv-fg text-gruv-bg rounded-full hover:bg-gruv-yellow transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-gruv-fg text-gruv-bg rounded-full hover:bg-gruv-yellow transition-colors"
               >
-                <ArrowRight size={14} />
+                <ArrowRight size={16} />
               </button>
             </form>
+          </div>
 
-            <p className="text-xs text-gruv-gray/50 mt-4">
-              Press Enter to unlock
+          {/* --- BOTTOM LEFT: TIME & DATE --- */}
+          {/* Absolute positioning keeps it stuck to the corner */}
+          <div className="absolute bottom-8 left-8 text-left z-10">
+            <h2 className="text-2xl font-bold text-gruv-fg tracking-wider">
+              {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </h2>
+            <p className="text-gruv-gray text-sm uppercase tracking-widest mt-1">
+              {time.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
             </p>
           </div>
+
         </motion.div>
       )}
     </AnimatePresence>
