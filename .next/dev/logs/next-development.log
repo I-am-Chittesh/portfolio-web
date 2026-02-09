@@ -1,8 +1,0 @@
-[00:00:02.016] Server  LOG     ✓ Ready in 1293ms
-[00:00:03.356] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:06.557] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/profile.png" "received" null
-[00:00:27.625] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:30.613] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/profile.png" "received" null
-[00:01:57.965] Server  LOG     ✓ Compiled in 1397ms
-[00:02:13.846] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:02:16.711] Server  ERROR   ⨯ "The requested resource isn't a valid image for" "/images/profile.png" "received" null
