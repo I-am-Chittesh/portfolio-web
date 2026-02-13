@@ -5,6 +5,9 @@ import LockScreen from "@/components/os/LockScreen";
 import Terminal from "@/components/apps/Terminal";
 import Taskbar from "@/components/os/Taskbar";
 import AboutApp from "@/components/apps/About";
+import ProjectsApp from "@/components/apps/Projects";
+import ContactApp from "@/components/apps/Contacts"; // <--- Import
+import ServicesApp from "@/components/apps/Services"; // <--- Import
 import { useSession } from "@/context/SessionContext";
 
 export default function Home() {
@@ -20,25 +23,38 @@ export default function Home() {
           
           <AnimatePresence mode="popLayout">
             
-            {/* 1. TERMINAL LAYER */}
+            {/* TERMINAL */}
             {isTerminalOpen && (
-              <div 
-                key="terminal-window" // <--- ADDED UNIQUE KEY
-                className="absolute inset-0 z-20 pointer-events-none"
-              >
-                 <div className="pointer-events-auto w-full h-full"> {/* Enable clicking inside */}
+              <div key="terminal-window" className="absolute inset-0 z-20 pointer-events-none">
+                 <div className="pointer-events-auto w-full h-full">
                     <Terminal />
                  </div>
               </div>
             )}
 
-            {/* 2. APP LAYER */}
+            {/* APP LAYERS */}
             {activeApp === "about" && (
-              <div 
-                key="about-window" // <--- ADDED UNIQUE KEY
-                className="absolute inset-0 z-30 flex items-center justify-center p-4"
-              >
+              <div key="about-window" className="absolute inset-0 z-30 flex items-center justify-center p-4">
                 <AboutApp /> 
+              </div>
+            )}
+
+            {activeApp === "projects" && (
+              <div key="projects-window" className="absolute inset-0 z-30 flex items-center justify-center p-4">
+                <ProjectsApp /> 
+              </div>
+            )}
+
+            {/* NEW APPS */}
+            {activeApp === "contact" && (
+              <div key="contact-window" className="absolute inset-0 z-30 flex items-center justify-center p-4">
+                <ContactApp /> 
+              </div>
+            )}
+
+            {activeApp === "settings" && (
+              <div key="settings-window" className="absolute inset-0 z-30 flex items-center justify-center p-4">
+                <ServicesApp /> 
               </div>
             )}
             
