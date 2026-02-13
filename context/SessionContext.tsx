@@ -2,49 +2,68 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-// The "Apps" available in your OS
-export type AppID = "about" | "projects" | "contact" | "terminal" | "settings" | null;
+export type AppID = "projects" | "contact" | "settings" | null;
 
 interface SessionContextType {
   isLocked: boolean;
   unlock: () => void;
   lock: () => void;
+  
+  // Terminal State
+  isTerminalOpen: boolean;
+  toggleTerminal: () => void;
+  minimizeTerminal: () => void;
+  maximizeTerminal: () => void;
+
+  // Other Apps
   activeApp: AppID;
   openApp: (app: AppID) => void;
   closeApp: () => void;
+  
   volume: number;
   setVolume: (vol: number) => void;
-  bootSequence: boolean; // Tracks if the "BIOS" text is running
+  bootSequence: boolean;
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
-  // 1. System State
   const [isLocked, setIsLocked] = useState(true);
   const [bootSequence, setBootSequence] = useState(true);
+  
+  // Terminal is OPEN by default, but minimized when locked
+  const [isTerminalOpen, setIsTerminalOpen] = useState(true); 
+  
   const [activeApp, setActiveApp] = useState<AppID>(null);
   const [volume, setVolume] = useState(50);
 
-  // 2. Boot Loader Effect
   useEffect(() => {
-    // Simulate a quick "BIOS" boot sequence on first load
     const timer = setTimeout(() => {
       setBootSequence(false);
-    }, 2500); // 2.5 seconds of "Boot Text"
+    }, 2500);
     return () => clearTimeout(timer);
   }, []);
 
-  // 3. Actions
   const unlock = () => setIsLocked(false);
   const lock = () => setIsLocked(true);
   
+  // Terminal Controls
+  const toggleTerminal = () => setIsTerminalOpen(!isTerminalOpen);
+  const minimizeTerminal = () => setIsTerminalOpen(false);
+  const maximizeTerminal = () => {
+    setIsTerminalOpen(true);
+    setActiveApp(null); // Close other apps when Terminal comes back
+  };
+
+  // App Controls
   const openApp = (app: AppID) => {
     setActiveApp(app);
+    setIsTerminalOpen(false); // <--- MAGIC: Minimize terminal when app opens
   };
 
   const closeApp = () => {
     setActiveApp(null);
+    setIsTerminalOpen(true); // <--- MAGIC: Bring terminal back when app closes
   };
 
   return (
@@ -53,6 +72,10 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         isLocked,
         unlock,
         lock,
+        isTerminalOpen,
+        toggleTerminal,
+        minimizeTerminal,
+        maximizeTerminal,
         activeApp,
         openApp,
         closeApp,
@@ -66,11 +89,10 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// 4. Custom Hook to use the OS
 export function useSession() {
   const context = useContext(SessionContext);
   if (context === undefined) {
     throw new Error("useSession must be used within a SessionProvider");
   }
   return context;
-}
+} 

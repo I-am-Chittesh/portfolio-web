@@ -1,17 +1,28 @@
 "use client";
 
 import LockScreen from "@/components/os/LockScreen";
+import Terminal from "@/components/apps/Terminal"; // <--- Import this
+import { useSession } from "@/context/SessionContext";
 
 export default function Home() {
+  const { isLocked } = useSession();
+
   return (
-    <main className="h-screen w-screen overflow-hidden bg-wallpaper bg-cover bg-center">
-      {/* 1. The Lock Screen Overlay */}
+    <main className="h-screen w-screen overflow-hidden bg-gruv-bg relative">
       <LockScreen />
 
-      {/* 2. The Desktop (Hidden behind Lock Screen for now) */}
-      <div className="h-full w-full flex items-center justify-center">
-        <h1 className="text-gruv-fg text-2xl">Desktop Environment Loading...</h1>
-      </div>
+      {/* Only show Desktop when unlocked */}
+      {!isLocked && (
+        <>
+          {/* Wallpaper / Grid Effect */}
+          <div className="absolute inset-0 bg-[size:50px_50px] bg-grid-pattern opacity-10 pointer-events-none" />
+          
+          {/* The Apps */}
+          <Terminal />
+          
+          {/* We will add Taskbar here next */}
+        </>
+      )}
     </main>
   );
 }

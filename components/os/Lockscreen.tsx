@@ -67,7 +67,7 @@ export default function LockScreen() {
             {/* Profile Pic */}
             <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-gruv-gray/30 ring-4 ring-gruv-bgSoft shadow-2xl">
               <Image 
-                src="/images/profile.png"
+                src="/public/icons/profile.png"
                 alt="User"
                 fill
                 className="object-cover"
