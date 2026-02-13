@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-export type AppID = "projects" | "contact" | "settings" | null;
+export type AppID = "projects" | "contact" | "settings" | "about" | null;
 
 interface SessionContextType {
   isLocked: boolean;
