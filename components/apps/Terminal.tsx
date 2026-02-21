@@ -28,7 +28,13 @@ export default function Terminal() {
 
     switch (cmd) {
       case "help":
-        newHistory.push({ type: "response", content: "Available commands: whoami, projects, contact, clear" });
+        newHistory.push({ type: "response", content: "Available commands:" });
+        newHistory.push({ type: "response", content: "  whoami    - About Chittesh" });
+        newHistory.push({ type: "response", content: "  projects  - View my work (GUI)" });
+        newHistory.push({ type: "response", content: "  contact   - Send me a message" });
+        newHistory.push({ type: "response", content: "  system    - View system resources & skills" });
+        newHistory.push({ type: "response", content: "  date      - Print current system date" });
+        newHistory.push({ type: "response", content: "  clear     - Clear terminal" });
         break;
       case "whoami":
         newHistory.push({ type: "response", content: "Chittesh | AI & Robotics Engineer" });
@@ -41,12 +47,25 @@ export default function Terminal() {
         newHistory.push({ type: "success", content: "Opening Mail Client..." });
         setTimeout(() => openApp("contact"), 800);
         break;
+      case "settings":
+      case "system":
+        newHistory.push({ type: "success", content: "Loading System Daemons..." });
+        setTimeout(() => openApp("settings"), 800);
+        break;
+      case "date":
+        newHistory.push({ type: "response", content: new Date().toString() });
+        break;
+      case "sudo":
+        newHistory.push({ type: "error", content: "chittesh is not in the sudoers file. This incident will be reported." });
+        break;
       case "clear":
         setHistory(WELCOME_MSG);
         setInput("");
         return;
+      case "":
+        break;
       default:
-        newHistory.push({ type: "error", content: `Command not found: ${cmd}` });
+        newHistory.push({ type: "error", content: `Command not found: ${cmd}. Type 'help' for a list of commands.` });
     }
     setHistory(newHistory);
     setInput("");
